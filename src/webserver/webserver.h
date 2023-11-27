@@ -1,0 +1,2 @@
+void initWebserver();
+void createEndpoints();

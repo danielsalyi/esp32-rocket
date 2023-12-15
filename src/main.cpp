@@ -4,24 +4,26 @@
 #include <utils/configs.h>
 #include <utils/webserver/webserver.h>
 #include <utils/logger/logger.h>
+#include <ArduinoLog.h>
 
 void setup()
 {
+    initLogger();
+
+    // move this to logger
     Serial0.begin(BAUD_RATE);
-    Serial0.println("======ESP Setup======");
+    Log.begin(LOG_LEVEL_VERBOSE, &Serial);
+    Log.verbose("======ESP Setup======");
 
     initActuators();
     initSensors();
 
     initWebserver();
 
-    initLogger();
+    // schedule tasks?
+    // xtaskcreate(...)
+    vTaskStartScheduler(); // ????
 }
-
-// uxTaskGetSystemState
-// vTaskGetRunTimeStats
-
-// https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
 
 void loop()
 {

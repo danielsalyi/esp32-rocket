@@ -1,17 +1,30 @@
 #include <Arduino.h>
-#include <WiFi.h>
-#include <webserver/webserver.h>
-#include <config/config.h>
-#include <led/led.h>
+#include <actuators/actuators.h>
+#include <sensors/sensors.h>
+#include <utils/configs.h>
+#include <utils/webserver/webserver.h>
+#include <utils/logger/logger.h>
 
 void setup()
 {
     Serial0.begin(BAUD_RATE);
-    initLED();
+    Serial0.println("======ESP Setup======");
+
+    initActuators();
+    initSensors();
+
     initWebserver();
-    createEndpoints();
+
+    initLogger();
 }
+
+// uxTaskGetSystemState
+// vTaskGetRunTimeStats
+
+// https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
 
 void loop()
 {
+    // Loop is not used as everything is task or event based
+    vTaskDelete(NULL);
 }

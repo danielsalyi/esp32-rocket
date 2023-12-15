@@ -1,4 +1,0 @@
-#define LED_PIN 38
-#define SSID "PIT-Y29ZHR0ZJA7"
-#define PASSWORD "PMOLN9609FY"
-#define BAUD_RATE 115200

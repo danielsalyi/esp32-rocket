@@ -4,6 +4,9 @@ Welcome to our repository!
 
 If you are stuck, ask somebody more experienced in the team. But do not worry, you are safe to play around, as its impossible to break anything. If you made changes in the code, tests are running automatically to maintain the quality, and you cannot merge bad code. Additionally, we are reviewing your code before merging.
 
+This book might come in handy:
+https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
+
 ## Getting started
 
 1. Clone the repository 

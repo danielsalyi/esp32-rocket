@@ -1,0 +1,31 @@
+name: compile
+
+on:
+  pull_request:
+    branches: [main]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+              ~/.cache/pip
+              ~/.platformio/.cache
+              key: ${{ runner.os }}-pio
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Compile
+        run: pio run
+
+      # later run unit tests
+
+      # run on remote

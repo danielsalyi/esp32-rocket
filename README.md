@@ -1,7 +1,19 @@
 # esp32-rocket
 
+Welcome to our repository!
+
+If you are stuck, ask somebody more experienced in the team. But do not worry, you are safe to play around, as its impossible to break anything. If you made changes in the code, tests are running automatically to maintain the quality, and you cannot merge bad code. Additionally, we are reviewing your code before merging.
+
+## Getting started
+
+1. Clone the repository 
+2. Create a new branch
+3. Check Todo List https://github.com/users/danielsalyi/projects/2
+4. Start working
+
+You are also free to add libaries to a reasonable extent.
+
 ## Parts in the cirtcuit:
-pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rVM5zOhNv6iq0/edit#gid=0
 
 - Esp32
 - Relay 
@@ -12,6 +24,8 @@ pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rV
 <!-- - Big Button -->
 - 3 Pressure sensor
 
+pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rVM5zOhNv6iq0/edit#gid=0
+
 ## Modules to implement
 - Esp32 
     - Communication [x]
@@ -19,7 +33,7 @@ pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rV
 - Firing sequence [ ]
     - Ignition [ ]
     - Arming [ ]
-- Relay Board [x]
+- Pressure Valves [x]
 - Load cells [ ]
 - Pressure sensors [ ]
 - 1 servo (flow rate) [ ]

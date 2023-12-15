@@ -12,7 +12,6 @@ void setup()
 
     initActuators();
     initSensors();
-    ASADASDASD
 
     initWebserver();
 

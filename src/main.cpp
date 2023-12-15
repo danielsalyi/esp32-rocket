@@ -14,5 +14,4 @@ void setup()
 
 void loop()
 {
-    showLED(); // Later xDelay()
 }

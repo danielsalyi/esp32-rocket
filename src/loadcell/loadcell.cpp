@@ -1,5 +1,7 @@
 #include <Arduino.h>
-#include <sensors/loadcell/loadcell.h>
+#include <loadcell/loadcell.h>
+
+int _pin;
 
 LoadCell::LoadCell(int pin)
 {

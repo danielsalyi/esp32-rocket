@@ -1,6 +1,6 @@
 #include "FS.h"
 #include <LittleFS.h>
-#include <utils/logger/logger.h>
+#include <logger/logger.h>
 
 #define FORMAT_LITTLEFS_IF_FAILED true
 

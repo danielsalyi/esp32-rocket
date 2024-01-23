@@ -1,9 +1,9 @@
 #include <ESPAsyncWebServer.h>
-#include <actuators/led/led.h>
-#include <utils/configs.h>
-#include <utils/webserver/responses/led_responses.h>
+#include <led/led.h>
+#include <configs.h>
+#include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
-#include "utils/logger/logger.h"
+#include "logger/logger.h"
 
 #define SPIFFS LittleFS
 
@@ -20,7 +20,7 @@ void createWifiConnection()
     }
     Serial0.println(WiFi.localIP());
 
-    setLED(0, 255, 0);
+    led.set(0, 255, 0);
 }
 
 void createEndpoints()

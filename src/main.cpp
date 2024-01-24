@@ -5,7 +5,7 @@
 #include <flashWriter/flashWriter.h>
 #include <pressureSensor/pressureSensor.h> 
 #include <flowrate/flowrate.h> 
-#include <loadCell/loadCell.h>
+#include <loadCell/loadcell.h>
 
 void setup()
 {

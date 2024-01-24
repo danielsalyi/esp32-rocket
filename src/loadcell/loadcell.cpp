@@ -1,19 +1,18 @@
 #include <Arduino.h>
 #include <loadcell/loadcell.h>
 
-int _pin;
+LoadCell loadCell;
 
-LoadCell::LoadCell(int pin)
+LoadCell::LoadCell()
 {
-    _pin = pin;
 }
 
 uint16_t LoadCell::read()
 {
-    return analogRead(_pin);
+    return analogRead(pin);
 }
 
-void LoadCell::begin()
+void LoadCell::setup()
 {
-    pinMode(_pin, INPUT);
+    // pinMode(pin, INPUT);
 }

@@ -1,15 +1,69 @@
 #include <ESPAsyncWebServer.h>
+#include <webserver/webserver.h>
 #include <led/led.h>
 #include <configs.h>
 #include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
-#include "logger/logger.h"
+#include "flashWriter/flashWriter.h"
 
 #define SPIFFS LittleFS
 
-AsyncWebServer server(80);
+// arming bool
+bool armed = false;
 
-void createWifiConnection()
+AsyncWebServer server(80);
+Webserver webserver; // singleton
+//https://stackoverflow.com/questions/1008019/how-do-you-implement-the-singleton-design-pattern/1008289#1008289
+// maybe do it with a legit singleton pattern?
+
+
+// public
+Webserver::Webserver()
+{
+    // cannot call setup here, it will crash it
+}
+
+void Webserver::setup()
+{
+    initWebserver();
+}
+
+
+// private
+void Webserver::initWebserver()
+{
+    createWifiConnection();
+
+    createEndpoints();
+    createFlashWriterEndpoints();
+
+    server.begin(); // has a priority 3
+}
+
+void Webserver::createSequenceEndpoints()
+{
+    server.on("/arm", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                  armed = true;
+                  request->send(200, "OK");
+                  //
+              });
+
+    server.on("/sequence", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                if (armed){
+                    // create task for sequence 
+
+                    // xTaskCreate()...;
+
+                    armed = false;
+                }
+                  request->send(200, "OK");
+                  //
+              });
+}
+
+void Webserver::createWifiConnection()
 {
     WiFi.begin(SSID, PASSWORD);
 
@@ -20,13 +74,18 @@ void createWifiConnection()
     }
     Serial0.println(WiFi.localIP());
 
-    led.set(0, 255, 0);
+    // LED indication of connection
+    led.set(0, 255, 0); // green
 }
 
-void createEndpoints()
-{
+// LED endpoints
+void Webserver::createEndpoints(){
     server.on("/led", HTTP_GET, onLedRequest, NULL, onLedBody);
+}
 
+// Flash writer endpoints
+void Webserver::createFlashWriterEndpoints()
+{
     server.on("/read", HTTP_GET, [](AsyncWebServerRequest *request)
               {
                   request->send(SPIFFS, "/data1.csv", "text/plain");
@@ -35,7 +94,7 @@ void createEndpoints()
 
     server.on("/flush", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  flushFile();
+                  flashWriter.flush();
                   request->send(200, "OK");
                   //
               });
@@ -50,17 +109,9 @@ void createEndpoints()
     server.on("/write", HTTP_GET, [](AsyncWebServerRequest *request)
               {
                   const char *mesage = "1, 2, 3, 4, 5;";
-                  appendToFile(mesage);
+                  flashWriter.write(mesage);
 
                   request->send(200, "OK");
                   //
               });
-
-    server.begin(); // has a priority 3
-}
-
-void initWebserver()
-{
-    createWifiConnection();
-    createEndpoints();
 }

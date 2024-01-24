@@ -9,7 +9,6 @@ LED led; // initialize as global led object
 void LED::setup()
 {
     WS2812B.begin();
-    WS2812B.setBrightness(LED_BRIGHTNESS);
     set(255, 255, 255);
 }
 

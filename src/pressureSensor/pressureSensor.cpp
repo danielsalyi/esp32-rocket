@@ -18,8 +18,6 @@ void initPressureSensors()
 // ==================== PressureSensor Class ====================
 PressureSensor::PressureSensor() {}
 
-int pin;
-
 uint16_t PressureSensor::read()
 {
     return analogRead(pin);

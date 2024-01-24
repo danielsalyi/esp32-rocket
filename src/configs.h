@@ -5,7 +5,7 @@
 #define PRESS_SENSOR_1 36
 #define PRESS_SENSOR_2 34
 #define PRESS_SENSOR_3 32
-
+#define SEVO_PIN 26
 
 #define BAUD_RATE 115200
 #define LED_BRIGHTNESS 50

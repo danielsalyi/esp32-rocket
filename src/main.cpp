@@ -2,32 +2,37 @@
 #include <configs.h>
 #include <led/led.h>
 #include <webserver/webserver.h>
-#include <logger/logger.h>
+#include <flashWriter/flashWriter.h>
 #include <pressureSensor/pressureSensor.h> 
-
+#include <flowrate/flowrate.h> 
+#include <loadCell/loadCell.h>
 
 void setup()
 {
     Serial0.begin(BAUD_RATE);
 
-    // SETUP
     Serial0.println("======ESP Setup======");
-    // LED 
-    led.setup();
 
-    // Pressure sensor
+    // LED
+    led.setup();
+    
+    // Flash writer
+    flashWriter.setup();
+
+    // Pressure sensors
     initPressureSensors();
     Serial0.printf("Pressure sensor 1: %u\n", PressureSensors[0].read()); 
 
     // Flowrate 
+    flowRate.setup();
+    Serial0.printf("Flowrate: %u\n", flowRate.read());    
 
     // Load cell
+    loadCell.setup();
 
     // Webserver
-    initWebserver();
+    webserver.setup();
 
-    // Logger
-    initLogger();
     Serial0.println("======Setup DONE======");
 
 
@@ -35,14 +40,13 @@ void setup()
     Serial0.println("Scheduling tasks...");
     vTaskStartScheduler();
 
-    // Hook are in the webserver.cpp file
-    // sequences are also gonna be there
+    // Hooks are in the webserver.cpp file
+    // sequences are also gonna be somewhere there
 }
 
-// vTaskGetRunTimeStats
-// uxTaskGetSystemState
 
 // https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
+
 
 void loop()
 {

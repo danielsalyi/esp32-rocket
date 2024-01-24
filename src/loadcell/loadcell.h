@@ -1,18 +1,18 @@
 #ifndef LOADCELL_H
 #define LOADCELL_H
 
-#include <Arduino.h>
-
-class LoadCell
-{
-private:
-    int _pin;
+class LoadCell {
 
 public:
-    LoadCell(int pin);
+    LoadCell();
 
-    void begin();
+    void setup();
     uint16_t read();
+
+private:
+    int pin;
 };
+
+extern LoadCell loadCell;
 
 #endif

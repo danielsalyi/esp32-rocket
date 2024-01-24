@@ -1,27 +1,52 @@
 #include <Arduino.h>
-#include <actuators/actuators.h>
-#include <sensors/sensors.h>
-#include <utils/configs.h>
-#include <utils/webserver/webserver.h>
-#include <utils/logger/logger.h>
+#include <configs.h>
+#include <led/led.h>
+#include <webserver/webserver.h>
+#include <flashWriter/flashWriter.h>
+#include <pressureSensor/pressureSensor.h> 
+#include <flowrate/flowrate.h> 
+#include <loadcell/loadcell.h>
 
 void setup()
 {
     Serial0.begin(BAUD_RATE);
+
     Serial0.println("======ESP Setup======");
 
-    initActuators();
-    initSensors();
+    // LED
+    led.setup();
+    
+    // Flash writer
+    flashWriter.setup();
 
-    initWebserver();
+    // Pressure sensors
+    initPressureSensors();
+    Serial0.printf("Pressure sensor 1: %u\n", PressureSensors[0].read()); 
 
-    initLogger();
+    // Flowrate 
+    flowRate.setup();
+    Serial0.printf("Flowrate: %u\n", flowRate.read());    
+
+    // Load cell
+    loadCell.setup();
+
+    // Webserver
+    webserver.setup();
+
+    Serial0.println("======Setup DONE======");
+
+
+    // TASKS
+    Serial0.println("Scheduling tasks...");
+    vTaskStartScheduler();
+
+    // Hooks are in the webserver.cpp file
+    // sequences are also gonna be somewhere there
 }
 
-// uxTaskGetSystemState
-// vTaskGetRunTimeStats
 
 // https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
+
 
 void loop()
 {

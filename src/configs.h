@@ -2,10 +2,10 @@
 #define PASSWORD "PMOLN9609FY"
 
 #define LED_PIN 38
-#define PRESS_SENSOR_1 36
-#define PRESS_SENSOR_2 34
-#define PRESS_SENSOR_3 32
-#define SEVO_PIN 26
+#define PRESS_SENSOR_1 4
+#define PRESS_SENSOR_2 5
+#define PRESS_SENSOR_3 6
+#define SEVO_PIN 45
 
 #define BAUD_RATE 115200
 #define LED_BRIGHTNESS 50

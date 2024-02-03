@@ -46,9 +46,41 @@ pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rV
         - 3 pressure
         - 1-2 load
 
-
+some links:
 https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-reference/system/freertos_idf.html#critical-sections
 
 https://microcontrollerslab.com/arduino-freertos-structure-queue-receive-data-multiple-resources/
 https://forums.freertos.org/t/usage-of-freertos-in-a-simple-data-logging-communication-system/12115/13
 https://www.freertos.org/FreeRTOS_Support_Forum_Archive/December_2014/freertos_Passing_elements_to_task_for_writing_SD_Card_dba9ba27j.html
+
+
+## Setting up environment:
+
+### toolbar - nice to have
+https://docs.platformio.org/en/stable/integration/ide/vscode.html#ide-vscode-settings
+
+go to vscode settings -> platformio -> toolbar - settings.json
+
+add somewhere between the where u want it: ( u can also edit it)
+```
+{
+            "text": "$(arrow-up)",
+            "tooltip": "PlatformIO: Remote Upload",
+            "commands": [{
+                "id": "platformio-ide.runPIOCoreCommand",
+                "args": "pio remote run --target upload --environment ${command:platformio-ide.activeEnvironment}"
+            }]
+        },
+        {
+            "text": "$(plug)",
+            "tooltip": "PlatformIO: Remote monitor",
+            "commands": [{
+                "id": "platformio-ide.runPIOCoreCommand",
+                "args": "pio remote device monitor -b 115200"
+            }]
+        },
+```
+
+
+### pre and post scripts (for later)
+https://docs.platformio.org/en/latest/scripting/actions.html

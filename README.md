@@ -46,6 +46,8 @@ pinout: https://docs.google.com/spreadsheets/d/1gh6bkqz8IQwBzecCjn6oTz4n6H4Um9rV
         - 3 pressure
         - 1-2 load
 
+https://www.donskytech.com/esp32-exception-decoder/
+
 some links:
 https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-reference/system/freertos_idf.html#critical-sections
 

@@ -31,14 +31,6 @@ void setup()
     flowRate.setup();
     Serial0.println("======flowrate setup======");
     
-    flowRate.set(0);
-    // vTaskDelay(5000 / portTICK_PERIOD_MS);
-    Serial0.printf("Flowrate: %u\n", flowRate.read());    
-
-    flowRate.set(270);
-    // vTaskDelay(5000 / portTICK_PERIOD_MS);
-    Serial0.printf("Flowrate: %u\n", flowRate.read());    
-
     
     // Load cell
     loadCell.setup();
@@ -47,8 +39,6 @@ void setup()
     webserver.setup();
 
     Serial0.println("======Setup DONE======");
-
-    Serial0.write('b\x03');
     
     // Hooks are in the webserver.cpp file
     // sequences are also gonna be somewhere there

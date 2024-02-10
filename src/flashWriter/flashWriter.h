@@ -18,6 +18,7 @@ class FlashWriter {
     FlashWriter();
     void setup();
     void write(const char *message);
+    void writeSensors(const sensorReadings &readings)
     void flush();
   private:
     void initLogger();

@@ -5,6 +5,9 @@
 #include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
 #include "flashWriter/flashWriter.h"
+#include "pressureSensor/pressureSensor.h"
+#include "flowrate/flowrate.h"
+#include "loadcell/loadcell.h"
 #include <cstdint> 
 
 #define SPIFFS LittleFS
@@ -118,10 +121,22 @@ void Webserver::createFlashWriterEndpoints()
     
     server.on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  sensorReadings readings = {1, 2, 3, 456, 789};
+                  sensorReadings readings;
+                  readSensors(readings);
                   flashWriter.writeSensors(readings);
 
                   request->send(200, "OK");
                   //
               });
+}
+
+void Webserver::readSensors(sensorReadings& readings) {
+    // read the pressure sensors
+    for (int i = 0; i < numPressureSensors) {
+        readings.flowRateReading[i] = PressureSensors[i].read();
+    }
+    // read the load cell
+    readings.loadCellReading = loadCell.read();
+    // read the flow rate
+    readings.flowRateReading = flowRate.read();
 }

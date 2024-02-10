@@ -9,7 +9,7 @@ struct sensorReadings {
   uint16_t pressureReading;
   uint16_t loadCellReading;
   int flowRateReading;
-} 
+};
 
 class FlashWriter {
   public:

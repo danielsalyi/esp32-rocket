@@ -7,7 +7,7 @@
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
 
 struct sensorReadings {
-  uint16_t pressureSensor[numPressureSensors];
+  uint16_t pressureSensorReadings[numPressureSensors];
   uint16_t loadCellReading;
   int flowRateReading;
 };

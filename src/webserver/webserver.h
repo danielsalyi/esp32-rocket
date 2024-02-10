@@ -13,8 +13,8 @@ class Webserver{
         void createWifiConnection();
         void createFlashWriterEndpoints();
         void createSequenceEndpoints();
-        void readSensors(sensorReadings& readings);
 };
+void readSensors(sensorReadings& readings);
 
 extern Webserver webserver;
 

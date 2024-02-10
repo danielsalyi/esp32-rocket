@@ -130,10 +130,10 @@ void Webserver::createFlashWriterEndpoints()
               });
 }
 
-void Webserver::readSensors(sensorReadings& readings) {
+void readSensors(sensorReadings& readings) {
     // read the pressure sensors
     for (int i = 0; i < numPressureSensors; i++) {
-        readings.flowRateReading[i] = PressureSensors[i].read();
+        readings.pressureSensorReadings[i] = PressureSensors[i].read();
     }
     // read the load cell
     readings.loadCellReading = loadCell.read();

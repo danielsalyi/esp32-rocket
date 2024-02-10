@@ -119,7 +119,7 @@ void Webserver::createFlashWriterEndpoints()
     server.on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
               {
                   sensorReadings readings = {1, 2, 3, 456, 789};
-                  flashWriter.write(readings);
+                  flashWriter.writeSensors(readings);
 
                   request->send(200, "OK");
                   //

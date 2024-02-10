@@ -1,5 +1,6 @@
 #ifndef WEBSERVER_H
 #define WEBSERVER_H
+#include "flashWriter/flashWriter.h"
 
 class Webserver{
     public:

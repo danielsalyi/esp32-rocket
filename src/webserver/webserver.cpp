@@ -132,7 +132,7 @@ void Webserver::createFlashWriterEndpoints()
 
 void Webserver::readSensors(sensorReadings& readings) {
     // read the pressure sensors
-    for (int i = 0; i < numPressureSensors) {
+    for (int i = 0; i < numPressureSensors; i++) {
         readings.flowRateReading[i] = PressureSensors[i].read();
     }
     // read the load cell

@@ -4,6 +4,12 @@
 #define FORMAT_LITTLEFS_IF_FAILED true
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
 
+struct sensorReadings {
+  uint16_t pressureReading;
+  uint16_t loadCellReading;
+  int flowRateReading;
+}
+
 
 class FlashWriter {
   public:

@@ -1,5 +1,7 @@
-#define SSID "PIT-Y29ZHR0ZJA7"
-#define PASSWORD "PMOLN9609FY"
+//#define SSID "PIT-Y29ZHR0ZJA7"
+//#define PASSWORD "PMOLN9609FY"
+#define SSID "Mats-hotspot"
+#define PASSWORD "quackquack"
 
 #define LED_PIN 38
 #define PRESS_SENSOR_1 4

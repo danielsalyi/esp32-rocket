@@ -5,6 +5,7 @@
 #include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
 #include "flashWriter/flashWriter.h"
+#include <cstdint> 
 
 #define SPIFFS LittleFS
 
@@ -110,6 +111,15 @@ void Webserver::createFlashWriterEndpoints()
               {
                   const char *mesage = "1, 2, 3, 4, 5;";
                   flashWriter.write(mesage);
+
+                  request->send(200, "OK");
+                  //
+              });
+    
+    server.on("/write", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                  sensorReadings readings = {123, 456, 789};
+                  flashWriter.write(readings);
 
                   request->send(200, "OK");
                   //

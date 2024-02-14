@@ -1,6 +1,8 @@
 #ifndef LOADCELL_H
 #define LOADCELL_H
 
+#include "HX711.h"
+
 class LoadCell {
 
 public:
@@ -10,7 +12,7 @@ public:
     uint16_t read();
 
 private:
-    int pin;
+    HX711 scale;
 };
 
 extern LoadCell loadCell;

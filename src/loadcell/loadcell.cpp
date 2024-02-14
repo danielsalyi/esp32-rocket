@@ -5,8 +5,6 @@
 
 LoadCell loadCell;
 
-HX711 scale;
-
 LoadCell::LoadCell()
 {
 }
@@ -20,6 +18,7 @@ void LoadCell::setup()
 {
     scale.begin(LOADCELL_DT, LOADCELL_SCK);
 
+    // it will be "ready" even if its not connected so idk
     if(scale.is_ready())
     {
         scale.set_scale();

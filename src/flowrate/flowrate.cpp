@@ -3,10 +3,10 @@
 #include <configs.h>
 #include <flowrate/flowrate.h>
 
-Servo servo;
-FlowRate flowRate;
+FlowRate flowRate[] = {FlowRate(), FlowRate()};
 
 FlowRate::FlowRate() {
+    servo = Servo();
 }
 
 void FlowRate::setup() {
@@ -20,18 +20,11 @@ void FlowRate::set(int value) {
 void FlowRate::set(int value, int speed) {
     for (int i = servo.read(); i < value; i++)
     {
-        flowRate.set(i);
+        this->set(i);
         vTaskDelay(speed / portTICK_PERIOD_MS);
     }
 }
 
-void FlowRate::set(int start, int end, int speed) {
-    for (int i = start; i < end; i++)
-    {
-        flowRate.set(i);
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }
-}
 
 int FlowRate::read() {
     // min pulse 527 us

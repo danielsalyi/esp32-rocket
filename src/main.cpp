@@ -10,38 +10,41 @@
 void setup()
 {
     Serial0.begin(BAUD_RATE);
+    DEBUG("====== ESP Setup ======");
+    
 
-    Serial0.println("======ESP Setup======");
-
-    // LED
+    DEBUG("====== LED ======");
     led.setup();
 
-    Serial0.println("======LED======");
-    
-    // Flash writer
+
+    DEBUG("====== Flash ======");
     flashWriter.setup();
-    Serial0.println("======flash======");
 
-    // Pressure sensors
-    initPressureSensors();
-    Serial0.println("======press setup======");
-    Serial0.printf("Pressure sensor 1: %u\n", PressureSensors[0].read()); 
 
-    // Flowrate 
-    flowRate[0].setup();
-    flowRate[1].setup();
-    flowRate[0].set(0);
-    Serial0.println("======flowrate setup======");
+    DEBUG("====== Press Setup======");
+    PressureSensors[0].setup(PRESS_SENSOR_0);
+    PressureSensors[1].setup(PRESS_SENSOR_1);
+    PressureSensors[2].setup(PRESS_SENSOR_2);
+
+
+    DEBUG("======flowrate setup======");
+    flowRate[0].setup(FLOWRATE_PIN_0);
+    flowRate[1].setup(FLOWRATE_PIN_1);
+    flowRate[2].setup(FLOWRATE_PIN_2);
+    flowRate[3].setup(FLOWRATE_PIN_3);
+    flowRate[4].setup(FLOWRATE_PIN_4);
     
-    
-    // Load cell
-    loadCell.setup();
 
-    // Webserver
+    DEBUG("====== Load cell setup ======");
+    loadCell[0].setup(LOADCELL_DT_0, LOADCELL_SCK_0);
+    loadCell[1].setup(LOADCELL_DT_1, LOADCELL_SCK_1);
+
+
+    DEBUG("====== Webserver setup ======");
     webserver.setup();
 
-    Serial0.println("======Setup DONE======");
-    
+
+    DEBUG("======Setup DONE======");    
     // Hooks are in the webserver.cpp file
     // sequences are also gonna be somewhere there
     // vtastkschedular is already used so dont call

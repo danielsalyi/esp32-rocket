@@ -10,8 +10,6 @@ class Webserver{
         void initWebserver();
         void createEndpoints();
         void createWifiConnection();
-        void createFlashWriterEndpoints();
-        void createSequenceEndpoints();
 };
 
 extern Webserver webserver;

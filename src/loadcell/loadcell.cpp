@@ -3,7 +3,7 @@
 #include <HX711.h>
 #include <configs.h>
 
-LoadCell loadCell;
+LoadCell loadCell[2] = {LoadCell(), LoadCell()};
 
 LoadCell::LoadCell()
 {
@@ -14,7 +14,7 @@ uint16_t LoadCell::read()
     return scale.get_units(10);
 }
 
-void LoadCell::setup()
+void LoadCell::setup(int LOADCELL_DT, int LOADCELL_SCK)
 {
     scale.begin(LOADCELL_DT, LOADCELL_SCK);
 
@@ -22,11 +22,11 @@ void LoadCell::setup()
     if(scale.is_ready())
     {
         scale.set_scale();
-        Serial0.println("Scale is ready");
+        DEBUG("Scale is ready");
     }
     else
     {
-        Serial0.println("Scale is not ready");
+        DEBUG("Scale is not ready");
     }
 
     scale.tare(10); // calibration

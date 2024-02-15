@@ -49,7 +49,7 @@ void FlashWriter::initLogger()
 {
     if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED))
     {
-        Serial0.println("LittleFS Mount Failed");
+        DEBUG("LittleFS Mount Failed - Formatting after restart...");
         return;
     }
 
@@ -63,9 +63,9 @@ void FlashWriter::initLogger()
         }
 
         // file does not exist, create it
-        Serial0.println("Creating new file...");
+        DEBUG("Creating new file...");
         file = LittleFS.open("/data" + String(i) + ".csv", FILE_APPEND, true);
-        Serial0.printf("File opened %s\n", file.name());
+        DEBUG_F("File opened %s\n", file.name());
         break;
     }
 
@@ -80,8 +80,7 @@ void FlashWriter::appendToFile(const char *message)
     unsigned long start = micros();
     file.print(message);
     unsigned long delta = micros() - start;
-    Serial0.print("write time - ");
-    Serial0.println(delta);
+    DEBUG_F("Write time: %u", delta);
 }
 
 void FlashWriter::flushFile()
@@ -89,6 +88,5 @@ void FlashWriter::flushFile()
     unsigned long start = micros();
     file.flush();
     unsigned long delta = micros() - start;
-    Serial0.print("flush time - ");
-    Serial0.println(delta);
+    DEBUG_F("Write time: %u", delta);
 }

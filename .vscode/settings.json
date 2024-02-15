@@ -6,5 +6,6 @@
         "streambuf": "cpp",
         "regex": "cpp",
         "string": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

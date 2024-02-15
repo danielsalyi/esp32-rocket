@@ -8,13 +8,13 @@ class LoadCell {
 public:
     LoadCell();
 
-    void setup();
+    void setup(int dt, int sck);
     uint16_t read();
 
 private:
     HX711 scale;
 };
 
-extern LoadCell loadCell;
+extern LoadCell loadCell[2];
 
 #endif

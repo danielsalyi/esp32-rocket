@@ -8,14 +8,14 @@ class FlowRate {
     Servo servo;
   public:
     FlowRate();
-    void setup();
+    void setup(int pin);
     void set(int value);
     void set(int value, int speed);
     int read();
 
 };
 
-extern FlowRate flowRate[];
+extern FlowRate flowRate[5];
 
 #endif /* FLOWRATE_H_ */
 

@@ -66,7 +66,7 @@ void Webserver::createSequenceEndpoints()
 
 void Webserver::createWifiConnection()
 {
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID_WIFI, PASSWORD_WIFI);
 
     while (WiFi.status() != WL_CONNECTED)
     {

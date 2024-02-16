@@ -1,10 +1,5 @@
 #include "sequences/sequences.h"
 #include <Arduino.h>
-#include <flowrate/flowrate.h>
-#include "flashWriter/flashWriter.h"
-#include "pressureSensor/pressureSensor.h"
-#include "flowrate/flowrate.h"
-#include "loadcell/loadcell.h"
 
 bool arm = false;
 

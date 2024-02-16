@@ -27,8 +27,8 @@ void Sequences::launchSequence()
     }
 
 
-    flowRate.set(90);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // flowRate.set(90);
+    // vTaskDelay(1000 / portTICK_PERIOD_MS);
     
 
 }

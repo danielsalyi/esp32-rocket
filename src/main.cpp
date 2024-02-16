@@ -28,7 +28,9 @@ void setup()
     Serial0.printf("Pressure sensor 1: %u\n", PressureSensors[0].read()); 
 
     // Flowrate 
-    flowRate.setup();
+    flowRate[0].setup();
+    flowRate[1].setup();
+    flowRate[0].set(0);
     Serial0.println("======flowrate setup======");
     
     

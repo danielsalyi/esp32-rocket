@@ -1,6 +1,9 @@
 #ifndef LED_H
 #define LED_H
 
+#include "Adafruit_NeoPixel.h"
+#include "configs.h"
+
 class LED{
     public:
         LED();

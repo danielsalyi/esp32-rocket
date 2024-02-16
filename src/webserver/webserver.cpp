@@ -98,36 +98,48 @@ void Webserver::createFlashWriterEndpoints()
 
     server.on("/flush", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  flashWriter.flush();
-                  request->send(200, "OK");
+                  sendResponse(request, [](){
+                    flashWriter.flush();
+                  });
                   //
               });
 
     server.on("/status", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  Serial0.println(ESP.getFreeHeap());
-                  request->send(200, "OK");
+                  sendResponse(request, [](){
+                    Serial0.println(ESP.getFreeHeap());
+                  });
                   //
               });
 
     server.on("/write", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  const char *mesage = "1, 2, 3, 4, 5;";
-                  flashWriter.write(mesage);
-
-                  request->send(200, "OK");
+                  sendResponse(request, [](){
+                    const char *mesage = "1, 2, 3, 4, 5;";
+                    flashWriter.write(mesage);
+                  });
                   //
               });
     
     server.on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  sensorReadings readings;
-                  readSensors(readings);
-                  flashWriter.writeSensors(readings);
-
-                  request->send(200, "OK");
+                  sendResponse(request, []() {
+                    sensorReadings readings;
+                    readSensors(readings);
+                    flashWriter.writeSensors(readings);
+                  });
                   //
               });
+}
+
+template<typename Func>
+void sendResponse(AsyncWebServerRequest *request, Func func) {
+    try {
+        func();
+        request->send(200, "OK");
+    } catch (...) { // can add more errors here
+        request->send(400, "bad request");
+    }
 }
 
 void readSensors(sensorReadings& readings) {
@@ -137,6 +149,4 @@ void readSensors(sensorReadings& readings) {
     }
     // read the load cell
     readings.loadCellReading = loadCell.read();
-    // read the flow rate
-    readings.flowRateReading = flowRate.read();
 }

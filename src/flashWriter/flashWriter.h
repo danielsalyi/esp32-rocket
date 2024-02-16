@@ -1,15 +1,14 @@
 #ifndef FLASH_WRITER_H
 #define FLASH_WRITER_H
 #include <cstdint> 
-#include "pressureSensor/pressureSensor.h"
-
 #define FORMAT_LITTLEFS_IF_FAILED true
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
+
+#define numPressureSensors 3
 
 struct sensorReadings {
   uint16_t pressureSensorReadings[numPressureSensors];
   uint16_t loadCellReading;
-  int flowRateReading;
 };
 
 class FlashWriter {

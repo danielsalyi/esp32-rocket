@@ -27,10 +27,7 @@ void FlashWriter::write(const char *message)
 
 void FlashWriter::writeSensors(const sensorReadings &readings)
 {
-    // maybe some logs around here
     appendToFile(reinterpret_cast<const char*>(&readings));
-    
-    // other logs
 }
 
 void FlashWriter::flush()

@@ -15,6 +15,9 @@ class Webserver{
         void createSequenceEndpoints();
 };
 void readSensors(sensorReadings& readings);
+template<typename Func>
+void sendResponse(AsyncWebServerRequest *request, Func func);
+
 
 extern Webserver webserver;
 

@@ -3,26 +3,21 @@
 #include <flashWriter/flashWriter.h>
 #include <configs.h>
 
-File file;
 FlashWriter flashWriter; // singleton
 
 FlashWriter::FlashWriter()
 {
-    // cannot call setup here, it will crash it
+    file = File();
 }
 
-// public
 void FlashWriter::setup()
 {
     initLogger();
 }
 
-void FlashWriter::write(const char *message)
+void FlashWriter::append(const char *message)
 {
-    // maybe some logs around here
     appendToFile(message);
-    
-    // other logs
 }
 
 void FlashWriter::write(const sensorReadings &s) 
@@ -32,14 +27,29 @@ void FlashWriter::write(const sensorReadings &s)
 
 void FlashWriter::flush()
 {
-    // maybe some logs around here
     flushFile();
+}
 
-    // other logs
+String FlashWriter::pathToFile()
+{
+    return file.path();
+}
+
+void FlashWriter::appendSensorData(struct SensorData *sensorData)
+{
+
+    // here u need some counter to keep track of the number of data points
+
+    // package it
+    // appendToFile(sensorData);
+
+    // if counter reached, flush?
 }
 
 
-// private
+
+// =================== private===================
+
 void FlashWriter::initLogger()
 {
     if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED))
@@ -48,7 +58,26 @@ void FlashWriter::initLogger()
         return;
     }
 
-    file = LittleFS.open("/data1.csv", FILE_APPEND, true);
+    // Create a new file to write the data everytime
+    for(int i = 0; ; i++)
+    {
+        if(LittleFS.exists("/data" + String(i) + ".csv")) // exists will throw an error, but u can just ignore it probably
+        {
+            // file exists, just continue
+            continue;
+        }
+
+        // file does not exist, create it
+        Serial0.println("Creating new file...");
+        file = LittleFS.open("/data" + String(i) + ".csv", FILE_APPEND, true);
+        Serial0.printf("File opened %s\n", file.name());
+        break;
+    }
+
+    // idk why but works with the API but not with serial xd
+    String message = "VERIFY WRITE for file: " + String(file.path()) + "\n";
+    append(message.c_str());
+    flush(); // if u dont flush, it wont write to the file :'D
 }
 
 void FlashWriter::appendToFile(const char *message)

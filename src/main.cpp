@@ -28,25 +28,20 @@ void setup()
     Serial0.printf("Pressure sensor 1: %u\n", PressureSensors[0].read()); 
 
     // Flowrate 
-    flowRate.setup();
+    flowRate[0].setup();
+    flowRate[1].setup();
+    flowRate[0].set(0);
     Serial0.println("======flowrate setup======");
     
-    flowRate.set(0);
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-    Serial0.printf("Flowrate: %u\n", flowRate.read());    
-
-    flowRate.set(270);
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-    Serial0.printf("Flowrate: %u\n", flowRate.read());    
-
+    
     // Load cell
-    // loadCell.setup();
+    loadCell.setup();
 
     // Webserver
     webserver.setup();
 
     Serial0.println("======Setup DONE======");
-
+    
     // Hooks are in the webserver.cpp file
     // sequences are also gonna be somewhere there
     // vtastkschedular is already used so dont call

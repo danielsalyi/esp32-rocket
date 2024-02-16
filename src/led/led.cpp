@@ -2,7 +2,7 @@
 #include <configs.h>
 #include <Adafruit_NeoPixel.h>
 
-Adafruit_NeoPixel WS2812B(1, LED_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel WS2812B(1, LED_PIN, NEO_GRB + NEO_KHZ800); // Spent hours making this private, just let this be
 
 LED led; // initialize as global led object
 
@@ -20,5 +20,4 @@ void LED::set(int r, int g, int b)
 
 
 LED::LED() {
-    // cannot call setup here, it will crash it
 }

@@ -4,10 +4,7 @@
 #include <configs.h>
 #include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
-#include "flashWriter/flashWriter.h"
-#include "pressureSensor/pressureSensor.h"
-#include "flowrate/flowrate.h"
-#include "loadcell/loadcell.h"
+#include "sequences/sequences.h"
 #include <cstdint> 
 
 #define SPIFFS LittleFS
@@ -126,7 +123,7 @@ void Webserver::createFlashWriterEndpoints()
                   sendResponse(request, []() {
                     sensorReadings readings;
                     readSensors(readings);
-                    flashWriter.writeSensors(readings);
+                    flashWriter.appendSensorData(&readings);
                   });
                   //
               });
@@ -140,13 +137,4 @@ void sendResponse(AsyncWebServerRequest *request, Func func) {
     } catch (...) { // can add more errors here
         request->send(400, "bad request");
     }
-}
-
-void readSensors(sensorReadings& readings) {
-    // read the pressure sensors
-    for (int i = 0; i < numPressureSensors; i++) {
-        readings.pressureSensorReadings[i] = PressureSensors[i].read();
-    }
-    // read the load cell
-    readings.loadCellReading = loadCell.read();
 }

@@ -8,6 +8,7 @@ FlashWriter flashWriter; // singleton
 FlashWriter::FlashWriter()
 {
     file = File();
+    counter = 0;
 }
 
 void FlashWriter::setup()
@@ -20,11 +21,6 @@ void FlashWriter::append(const char *message)
     appendToFile(message);
 }
 
-void FlashWriter::writeSensors(const sensorReadings &readings)
-{
-    appendToFile(reinterpret_cast<const char*>(&readings));
-}
-
 void FlashWriter::flush()
 {
     flushFile();
@@ -35,15 +31,31 @@ String FlashWriter::pathToFile()
     return file.path();
 }
 
-void FlashWriter::appendSensorData(struct SensorData *sensorData)
+void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
 {
 
     // here u need some counter to keep track of the number of data points
 
     // package it
-    // appendToFile(sensorData);
+    if (!sensorReadings) return;
+
+    // Append pressure sensor readings
+    String dataString = "Pressure sensor readings: ";
+    for (int i = 0; i < numPressureSensors; ++i) {
+        dataString += String(sensorReadings->pressureSensorReadings[i]);
+        if (i < numPressureSensors - 1) {
+            dataString += ", "; 
+        }
+    }
+
+    // Append load cell reading
+    dataString += ",\n load cell reading: " + String(sensorReadings->loadCellReading) + "\n";
+
+    appendToFile(dataString.c_str());
+    counter += sizeof(dataString.c_str());
 
     // if counter reached, flush?
+    if (counter >= PAGE_SIZE) flush();
 }
 
 

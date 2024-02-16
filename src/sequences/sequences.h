@@ -19,4 +19,7 @@ class Sequences
 
 Sequences extern sequences;
 
+void readSensors(sensorReadings& readings);
+
+
 #endif

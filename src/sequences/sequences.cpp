@@ -1,6 +1,10 @@
 #include "sequences/sequences.h"
 #include <Arduino.h>
 #include <flowrate/flowrate.h>
+#include "flashWriter/flashWriter.h"
+#include "pressureSensor/pressureSensor.h"
+#include "flowrate/flowrate.h"
+#include "loadcell/loadcell.h"
 
 bool arm = false;
 
@@ -38,3 +42,11 @@ void Sequences::abortSequence()
     // do something
 }
 
+void readSensors(sensorReadings& readings) {
+    // read the pressure sensors
+    for (int i = 0; i < numPressureSensors; i++) {
+        readings.pressureSensorReadings[i] = PressureSensors[i].read();
+    }
+    // read the load cell
+    readings.loadCellReading = loadCell.read();
+}

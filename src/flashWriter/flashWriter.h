@@ -3,6 +3,8 @@
 #include <cstdint> 
 #define FORMAT_LITTLEFS_IF_FAILED true
 
+#define PAGE_SIZE 516
+
 #include "FS.h"
 
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
@@ -19,11 +21,12 @@ class FlashWriter {
     FlashWriter();
     void setup();
     void append(const char *message);
-    void appendSensorData(struct SensorData *sensorData);
+    void appendSensorData(struct sensorReadings *sensorReadings);
     String pathToFile();
     void flush();
   private:
     File file;
+    int counter;
     void initLogger();
     void appendToFile(const char *message);
     void flushFile();

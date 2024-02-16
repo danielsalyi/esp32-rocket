@@ -10,5 +10,9 @@
 #define PRESS_SENSOR_3 6
 #define SEVO_PIN 45
 
+#define LOADCELL_SCK 15
+#define LOADCELL_DT 7
+
+
 #define BAUD_RATE 115200
 #define LED_BRIGHTNESS 50

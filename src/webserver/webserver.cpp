@@ -92,7 +92,7 @@ void Webserver::createFlashWriterEndpoints()
 {
     server.on("/read", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  request->send(SPIFFS, "/data1.csv", "text/plain");
+                  request->send(SPIFFS, flashWriter.pathToFile(), "text/plain");
                   //
               });
 
@@ -114,10 +114,10 @@ void Webserver::createFlashWriterEndpoints()
 
     server.on("/write", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  sendResponse(request, [](){
-                    const char *mesage = "1, 2, 3, 4, 5;";
-                    flashWriter.write(mesage);
-                  });
+                  const char *mesage = "1, 2, 3, 4, 5;";
+                  flashWriter.append(mesage);
+
+                  request->send(200, "OK");
                   //
               });
     

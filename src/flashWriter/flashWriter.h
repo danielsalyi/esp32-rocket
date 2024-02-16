@@ -2,6 +2,9 @@
 #define FLASH_WRITER_H
 #include <cstdint> 
 #define FORMAT_LITTLEFS_IF_FAILED true
+
+#include "FS.h"
+
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
 
 #define numPressureSensors 3
@@ -15,10 +18,12 @@ class FlashWriter {
   public:
     FlashWriter();
     void setup();
-    void write(const char *message);
-    void writeSensors(const sensorReadings &readings);
+    void append(const char *message);
+    void appendSensorData(struct SensorData *sensorData);
+    String pathToFile();
     void flush();
   private:
+    File file;
     void initLogger();
     void appendToFile(const char *message);
     void flushFile();

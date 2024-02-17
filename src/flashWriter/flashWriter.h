@@ -3,7 +3,7 @@
 
 #define FORMAT_LITTLEFS_IF_FAILED true
 
-#include "FS.h"
+#include <LittleFS.h>
 
 // https://randomnerdtutorials.com/esp32-write-data-littlefs-arduino/
 

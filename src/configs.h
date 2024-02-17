@@ -48,10 +48,9 @@
 #define LOADCELL_SCK_1 9
 
 // relay - GPIO
-#define RELAY_PIN_0 48
+#define IGNITER_PIN 48 // RELAY_PIN_0 is the pin for the igniter
 #define RELAY_PIN_1 47
 #define RELAY_PIN_2 21
 #define RELAY_PIN_3 14
-
 
 #endif

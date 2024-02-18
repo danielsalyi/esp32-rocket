@@ -7,7 +7,7 @@
 #include <webserver/responses/sequences/sequences.h>
 
 AsyncWebServer server(80);
-Webserver webserver; 
+Webserver webserver;
 
 Webserver::Webserver()
 {
@@ -37,7 +37,8 @@ void Webserver::createWifiConnection()
     led.set(0, 255, 0); // green
 }
 
-void Webserver::createEndpoints(){
+void Webserver::createEndpoints()
+{
     createLedEndpoints(&server);
     createFlashWriterEndpoints(&server);
     createSequenceEndpoints(&server);

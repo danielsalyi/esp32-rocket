@@ -5,18 +5,36 @@
 #include <flowrate/flowrate.h>
 #include <configs.h>
 
-static bool armed;
-TaskHandle_t ignitionSequenceHandle;
-TaskHandle_t readSensorHandle;
+#include <atomic>
+
+static std::atomic<bool> isArmed(false);
+static std::atomic<bool> isIgnitionSequenceRunning(false);
+TaskHandle_t ignitionSequenceHandle = NULL;
+TaskHandle_t readSensorHandle = NULL;
+
+void readSensorTask(void *pvParameters)
+{
+    while (isIgnitionSequenceRunning)
+    {
+        // read data...
+
+        flashWriter.append("0,1,2,3,4,5,6,7,8,9,10; \n");
+        flashWriter.flush();
+
+        vTaskDelay(100 / portTICK_PERIOD_MS); // 100 delay in ms
+    }
+
+    // u need this for the task to delete itself if it jumps stacks?
+    vTaskDelete(NULL);
+}
 
 void cleanUpIgnitionSequence()
 {
-    vTaskDelete(ignitionSequenceHandle); // delete ignitionSequenceTask
+    DEBUG("Cleaning up ignition sequence...");
 
     digitalWrite(IGNITER_PIN, LOW); // turn off the igniter
 
-    vTaskDelete(readSensorHandle); // delete the readSensorTask
-    flashWriter.flush();           // flush the data to the flash
+    DEBUG("Cleaning up flow rate...");
 
     // close the valves
     flowRate[0].set(0);
@@ -24,6 +42,8 @@ void cleanUpIgnitionSequence()
     flowRate[2].set(0);
     flowRate[3].set(0);
     flowRate[4].set(0);
+
+    isIgnitionSequenceRunning = false;
 }
 
 void ignitionSequenceTask(void *pvParameters)
@@ -34,22 +54,12 @@ void ignitionSequenceTask(void *pvParameters)
     // wait 5 seconds
     // ...
 
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
     // ...
 
     // Clean up
     cleanUpIgnitionSequence();
-}
-
-void readSensorTask(void *pvParameters)
-{
-    for (;;)
-    {
-        // read data...
-
-        // flashwriter.write(data);
-
-        vTaskDelay(100 / portTICK_PERIOD_MS); // 100 delay in ms
-    }
+    vTaskDelete(NULL);
 }
 
 void createSequenceEndpoints(AsyncWebServer *server)
@@ -63,73 +73,79 @@ void createSequenceEndpoints(AsyncWebServer *server)
 
     server->on("/arm", HTTP_GET, [](AsyncWebServerRequest *request)
                {
+                   DEBUG("ARMED!");
                    led.set(255, 0, 0); // red
-                   armed = true;
+                   isArmed = true;
                    request->send(200, "ARMED!");
                    //
                });
 
     server->on("/disarm", HTTP_GET, [](AsyncWebServerRequest *request)
                {
+                   DEBUG("DISARMED!");
                    led.set(0, 255, 0); // green
-                   armed = false;
+                   isArmed = false;
                    request->send(200, "DISARMED!");
                    //
                });
 
     server->on("/armstatus", HTTP_GET, [](AsyncWebServerRequest *request)
                {
-                   String status = armed ? "ARMED!" : "DISARMED!";
+                   String status = isArmed ? "ARMED!" : "DISARMED!";
+                   DEBUG(status);
                    request->send(200, status.c_str());
                    //
                });
 
     server->on("/ignition", HTTP_GET, [](AsyncWebServerRequest *request)
                {
-                   if (armed)
-                   {
-
-                       // start with the reading
-                       xTaskCreate(readSensorTask,
-                                   "readSensorTask",
-                                   10000,
-                                   NULL,
-                                   1,
-                                   &readSensorHandle); // pass the address
-
-                       // Turn on the igniter
-                       pinMode(IGNITER_PIN, OUTPUT);
-                       digitalWrite(IGNITER_PIN, HIGH);
-
-                       // create task for ignition sequence
-                       xTaskCreate(ignitionSequenceTask,
-                                   "ignitionSequenceTask",
-                                   10000,
-                                   NULL,
-                                   1,
-                                   &ignitionSequenceHandle); // pass the address of ignitionSequenceHandle
-
-                       request->send(200, "Ignition sequence started!");
-                   }
-                   else
+                   if (!isArmed)
                    {
                        request->send(200, "Not armed!");
+                       return;
                    }
+
+                   if (isIgnitionSequenceRunning)
+                   {
+                       request->send(200, "Ignition sequence already running!");
+                       return;
+                   }
+
+                   DEBUG("Starting ignition sequence...");
+                   isIgnitionSequenceRunning = true;
+
+                   // start with the reading
+                   xTaskCreate(readSensorTask,
+                               "readSensorTask",
+                               10000,
+                               NULL,
+                               2,
+                               &readSensorHandle); // pass the address
+
+                   // Turn on the igniter
+                   //    pinMode(IGNITER_PIN, OUTPUT);
+                   //    digitalWrite(IGNITER_PIN, HIGH);
+
+                   // create task for ignition sequence
+                   xTaskCreate(ignitionSequenceTask,
+                               "ignitionSequenceTask",
+                               10000,
+                               NULL,
+                               1,
+                               &ignitionSequenceHandle); // pass the address of ignitionSequenceHandle
+
+                   request->send(200, "Ignition sequence started!");
                    //
                });
 
     server->on("/abort", HTTP_GET, [](AsyncWebServerRequest *request)
                {
-                   if (armed)
-                   {
-                       cleanUpIgnitionSequence();
+                   DEBUG("Aborting ignition sequence...");
 
-                       request->send(200, "Aborted!");
-                   }
-                   else
-                   {
-                       request->send(200, "Not armed!");
-                   }
+                   vTaskSuspend(ignitionSequenceHandle);
+                   cleanUpIgnitionSequence();
+
+                   request->send(200, "Cleaned up!");
                    //
                });
 }

@@ -41,8 +41,6 @@ void FlashWriter::appendSensorData(struct SensorData *sensorData)
     // if counter reached, flush?
 }
 
-
-
 // =================== private===================
 
 void FlashWriter::initLogger()
@@ -54,9 +52,9 @@ void FlashWriter::initLogger()
     }
 
     // Create a new file to write the data everytime
-    for(int i = 0; ; i++)
+    for (int i = 0;; i++)
     {
-        if(LittleFS.exists("/data" + String(i) + ".csv")) // exists will throw an error, but u can just ignore it probably
+        if (LittleFS.exists("/data" + String(i) + ".csv")) // exists will throw an error, but u can just ignore it probably
         {
             // file exists, just continue
             continue;
@@ -80,7 +78,7 @@ void FlashWriter::appendToFile(const char *message)
     unsigned long start = micros();
     file.print(message);
     unsigned long delta = micros() - start;
-    DEBUG_F("Write time: %u", delta);
+    DEBUG_F("Write time: %u \n", delta);
 }
 
 void FlashWriter::flushFile()
@@ -88,5 +86,5 @@ void FlashWriter::flushFile()
     unsigned long start = micros();
     file.flush();
     unsigned long delta = micros() - start;
-    DEBUG_F("Write time: %u", delta);
+    DEBUG_F("Flush time: %u \n", delta);
 }

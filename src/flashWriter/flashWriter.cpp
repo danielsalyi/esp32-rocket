@@ -48,7 +48,10 @@ void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
     dataString += String(sensorReadings->loadCellReading) + ";\n";
 
     counter += sizeof(dataString.c_str());
-    if (counter >= PAGE_SIZE) flush();
+    if (counter >= PAGE_SIZE) {
+        flush();
+        counter = sizeof(dataString.c_str());
+    };
 
     appendToFile(dataString.c_str());
     // if counter reached, flush?

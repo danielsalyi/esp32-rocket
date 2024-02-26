@@ -1,6 +1,9 @@
 #ifndef SEQUENCES_H
 #define SEQUENCES_H
-
+#include "flashWriter/flashWriter.h"
+#include "pressureSensor/pressureSensor.h"
+#include "flowrate/flowrate.h"
+#include "loadcell/loadcell.h"
 
 class Sequences
 {
@@ -18,5 +21,8 @@ class Sequences
 };
 
 Sequences extern sequences;
+
+void readSensors(sensorReadings& readings);
+
 
 #endif

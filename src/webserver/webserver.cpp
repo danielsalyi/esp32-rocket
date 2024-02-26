@@ -4,7 +4,8 @@
 #include <configs.h>
 #include <webserver/responses/led_responses.h>
 #include <LittleFS.h>
-#include "flashWriter/flashWriter.h"
+#include "sequences/sequences.h"
+#include <cstdint> 
 
 #define SPIFFS LittleFS
 
@@ -65,7 +66,7 @@ void Webserver::createSequenceEndpoints()
 
 void Webserver::createWifiConnection()
 {
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID_WIFI, PASSWORD_WIFI);
 
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -94,15 +95,17 @@ void Webserver::createFlashWriterEndpoints()
 
     server.on("/flush", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  flashWriter.flush();
-                  request->send(200, "OK");
+                  sendResponse(request, [](){
+                    flashWriter.flush();
+                  });
                   //
               });
 
     server.on("/status", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-                  Serial0.println(ESP.getFreeHeap());
-                  request->send(200, "OK");
+                  sendResponse(request, [](){
+                    Serial0.println(ESP.getFreeHeap());
+                  });
                   //
               });
 
@@ -114,4 +117,24 @@ void Webserver::createFlashWriterEndpoints()
                   request->send(200, "OK");
                   //
               });
+    
+    server.on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                  sendResponse(request, []() {
+                    sensorReadings readings;
+                    readSensors(readings);
+                    flashWriter.appendSensorData(&readings);
+                  });
+                  //
+              });
+}
+
+template<typename Func>
+void sendResponse(AsyncWebServerRequest *request, Func func) {
+    try {
+        func();
+        request->send(200, "OK");
+    } catch (...) { // can add more errors here
+        request->send(400, "bad request");
+    }
 }

@@ -2,8 +2,6 @@
 #include <pressureSensor/pressureSensor.h>
 #include <configs.h>
 
-#define numPressureSensors 3
-
 PressureSensor PressureSensors[numPressureSensors];
 
 void initPressureSensors()

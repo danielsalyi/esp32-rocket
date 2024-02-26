@@ -33,14 +33,10 @@ String FlashWriter::pathToFile()
 
 void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
 {
-
-    // here u need some counter to keep track of the number of data points
-
-    // package it
     if (!sensorReadings) return;
 
     // Append pressure sensor readings
-    String dataString = "Pressure sensor readings: ";
+    String dataString = "";
     for (int i = 0; i < numPressureSensors; ++i) {
         dataString += String(sensorReadings->pressureSensorReadings[i]);
         if (i < numPressureSensors - 1) {
@@ -49,13 +45,13 @@ void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
     }
 
     // Append load cell reading
-    dataString += ",\n load cell reading: " + String(sensorReadings->loadCellReading) + "\n";
+    dataString += String(sensorReadings->loadCellReading) + ";\n";
+
+    counter += sizeof(dataString.c_str());
+    if (counter >= PAGE_SIZE) flush();
 
     appendToFile(dataString.c_str());
-    counter += sizeof(dataString.c_str());
-
     // if counter reached, flush?
-    if (counter >= PAGE_SIZE) flush();
 }
 
 

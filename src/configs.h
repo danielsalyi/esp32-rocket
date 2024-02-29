@@ -5,8 +5,8 @@
 // ===============================================
 
 // ============== Passwords and SSID =============
-#define SSID "PIT-Y29ZHR0ZJA7"
-#define PASSWORD "PMOLN9609FY"
+#define SSID_WIFI "PIT-Y29ZHR0ZJA7"
+#define PASSWORD_WIFI "PMOLN9609FY"
 
 // ============== LOGGING CONFIGURATIONS =============
 #define BAUD_RATE 115200

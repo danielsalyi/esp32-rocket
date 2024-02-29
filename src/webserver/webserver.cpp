@@ -6,29 +6,16 @@
 #include <webserver/responses/writer/writer.h>
 #include <webserver/responses/sequences/sequences.h>
 
+#define SPIFFS LittleFS
+
+// arming bool
+bool armed = false;
+
 AsyncWebServer server(80);
 Webserver webserver;
 
 Webserver::Webserver()
 {
-}
-
-void checkWifiConnection(void *pvParameters)
-{
-    while (1)
-    {
-
-        vTaskDelay(3000 / portTICK_PERIOD_MS); // 1s delay
-        // wifi reconnects by default, but we want to change the led
-
-        if (WiFi.status() != WL_CONNECTED)
-        {
-            led.set(255, 255, 255); // white
-            DEBUG_F("wifi satus: %s \n", WiFi.status());
-        }
-    }
-
-    vTaskDelete(NULL);
 }
 
 void Webserver::setup()
@@ -42,7 +29,7 @@ void Webserver::setup()
 
 void Webserver::createWifiConnection()
 {
-    WiFi.begin(SSID, PASSWORD);
+    WiFi.begin(SSID_WIFI, PASSWORD_WIFI);
 
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -50,8 +37,6 @@ void Webserver::createWifiConnection()
         DEBUG("Connecting to WiFi..");
     }
     Serial0.println(WiFi.localIP());
-
-    xTaskCreate(checkWifiConnection, "checkWifiConnection", 10000, NULL, 4, NULL);
 
     // LED indication of connection
     led.set(0, 255, 0); // green

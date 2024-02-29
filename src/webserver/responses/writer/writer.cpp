@@ -27,4 +27,14 @@ void createFlashWriterEndpoints(AsyncWebServer *server)
                    request->send(200, "OK");
                    //
                });
+
+    server->on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
+               {
+                   //   sendResponse(request, []() {
+                   // sensorReadings readings;
+                   // readSensors(readings);
+                   // flashWriter.appendSensorData(&readings);
+                   //   });
+                   //
+               });
 }

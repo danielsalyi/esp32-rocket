@@ -1,5 +1,7 @@
 #ifndef PRESS_SENSOR_H
 #define PRESS_SENSOR_H
+#define numPressureSensors 3
+
 
 
 class PressureSensor

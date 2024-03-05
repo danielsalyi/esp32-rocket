@@ -3,14 +3,14 @@
 #include <configs.h>
 #include <flowrate/flowrate.h>
 
-FlowRate flowRate[] = {FlowRate(), FlowRate()};
+FlowRate flowRate[5] = {FlowRate(), FlowRate(), FlowRate(), FlowRate(), FlowRate()};
 
 FlowRate::FlowRate() {
     servo = Servo();
 }
 
-void FlowRate::setup() {
-    servo.attach(SEVO_PIN);
+void FlowRate::setup(int pin) {
+    servo.attach(pin);
 }
 
 void FlowRate::set(int value) {

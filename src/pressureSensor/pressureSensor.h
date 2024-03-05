@@ -3,7 +3,6 @@
 #define numPressureSensors 3
 
 
-void initPressureSensors();
 
 class PressureSensor
 {

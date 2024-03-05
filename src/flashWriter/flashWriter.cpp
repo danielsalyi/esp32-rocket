@@ -57,31 +57,29 @@ void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
     // if counter reached, flush?
 }
 
-
-
 // =================== private===================
 
 void FlashWriter::initLogger()
 {
     if (!LittleFS.begin(FORMAT_LITTLEFS_IF_FAILED))
     {
-        Serial0.println("LittleFS Mount Failed");
+        DEBUG("LittleFS Mount Failed - Formatting after restart...");
         return;
     }
 
     // Create a new file to write the data everytime
-    for(int i = 0; ; i++)
+    for (int i = 0;; i++)
     {
-        if(LittleFS.exists("/data" + String(i) + ".csv")) // exists will throw an error, but u can just ignore it probably
+        if (LittleFS.exists("/data" + String(i) + ".csv")) // exists will throw an error, but u can just ignore it probably
         {
             // file exists, just continue
             continue;
         }
 
         // file does not exist, create it
-        Serial0.println("Creating new file...");
+        DEBUG("Creating new file...");
         file = LittleFS.open("/data" + String(i) + ".csv", FILE_APPEND, true);
-        Serial0.printf("File opened %s\n", file.name());
+        DEBUG_F("File opened %s\n", file.name());
         break;
     }
 
@@ -96,8 +94,7 @@ void FlashWriter::appendToFile(const char *message)
     unsigned long start = micros();
     file.print(message);
     unsigned long delta = micros() - start;
-    Serial0.print("write time - ");
-    Serial0.println(delta);
+    DEBUG_F("Write time: %u \n", delta);
 }
 
 void FlashWriter::flushFile()
@@ -105,6 +102,5 @@ void FlashWriter::flushFile()
     unsigned long start = micros();
     file.flush();
     unsigned long delta = micros() - start;
-    Serial0.print("flush time - ");
-    Serial0.println(delta);
+    DEBUG_F("Flush time: %u \n", delta);
 }

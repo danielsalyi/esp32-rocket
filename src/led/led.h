@@ -2,7 +2,6 @@
 #define LED_H
 
 #include "Adafruit_NeoPixel.h"
-#include "configs.h"
 
 class LED{
     public:

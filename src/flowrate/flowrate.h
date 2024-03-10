@@ -6,9 +6,11 @@
 class FlowRate {
   private:
     Servo servo;
+    int pin;
   public:
     FlowRate();
     void setup(int pin);
+    void attach();
     void detach();
     void set(int value);
     void set(int value, int speed);

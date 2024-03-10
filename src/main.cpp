@@ -31,7 +31,9 @@ void setup()
     // set up the first 3 valves 
     flowRate[0].setup(FLOWRATE_PIN_0);
     flowRate[1].setup(FLOWRATE_PIN_1);
+    flowRate[2].setup(FLOWRATE_PIN_2);
     flowRate[3].setup(FLOWRATE_PIN_3);
+    flowRate[4].setup(FLOWRATE_PIN_4);
 
     
     DEBUG("motor 3 to 0");
@@ -95,55 +97,6 @@ void setup()
     // vtastkschedular is already used so dont call
 }
 
-// wait t ms
-void vTaskDelayMS(int t) 
-{
-    TickType_t xDelay = t / portTICK_PERIOD_MS;
-    vTaskDelay(xDelay);
-}
-
-void sequence() 
-{
-    //const 
-    // t -5
-    flowRate[0].set(OPEN_VALVE);
-    vTaskDelayMS(4000);
-
-    // t -2
-    // start ignition coil
-
-    // t -1
-    flowRate[1].set(OPEN_VALVE);
-    flowRate[3].set(OPEN_VALVE);
-
-    vTaskDelayMS(6000);
-
-
-    // t 4
-    // stop ignition coil
-
-    // t 5
-    // close valves
-    flowRate[0].set(CLOSE_VALVE);
-    flowRate[1].set(CLOSE_VALVE);
-    flowRate[3].set(CLOSE_VALVE);
-    // detach them
-    flowRate[0].detach();
-    flowRate[1].detach();
-    flowRate[3].detach();
-    // attach the other 2 valves
-    flowRate[2].setup(FLOWRATE_PIN_2);
-    flowRate[4].setup(FLOWRATE_PIN_4);
-    // open valves
-    flowRate[2].set(OPEN_VALVE);
-    flowRate[4].set(OPEN_VALVE);
-
-    vTaskDelayMS(5000);
-
-    // t 10
-    flowRate[2].set(CLOSE_VALVE);
-    flowRate[4].set(CLOSE_VALVE);
-}
 
 // https://freertos.org/Documentation/161204_Mastering_the_FreeRTOS_Real_Time_Kernel-A_Hands-On_Tutorial_Guide.pdf
 

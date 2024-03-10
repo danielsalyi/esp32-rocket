@@ -9,7 +9,11 @@ FlowRate::FlowRate() {
     servo = Servo();
 }
 
-void FlowRate::setup(int pin) {
+void FlowRate::setup(int pinNum) {
+    pin = pinNum;
+}
+
+void FlowRate::attach() {
     servo.attach(pin);
 }
 

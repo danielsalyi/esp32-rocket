@@ -12,6 +12,14 @@ static std::atomic<bool> isIgnitionSequenceRunning(false);
 TaskHandle_t ignitionSequenceHandle = NULL;
 TaskHandle_t readSensorHandle = NULL;
 
+// wait t ms
+void vTaskDelayMS(int t) 
+{
+    TickType_t xDelay = t / portTICK_PERIOD_MS;
+    vTaskDelay(xDelay);
+}
+
+
 void readSensorTask(void *pvParameters)
 {
     while (isIgnitionSequenceRunning)
@@ -21,7 +29,7 @@ void readSensorTask(void *pvParameters)
         flashWriter.append("0,1,2,3,4,5,6,7,8,9,10; \n");
         flashWriter.flush();
 
-        vTaskDelay(100 / portTICK_PERIOD_MS); // 100 delay in ms
+        vTaskDelayMS(100); // 100 delay in ms
     }
 
     // u need this for the task to delete itself if it jumps stacks?
@@ -37,27 +45,59 @@ void cleanUpIgnitionSequence()
     DEBUG("Cleaning up flow rate...");
 
     // close the valves
-    flowRate[0].set(0);
-    flowRate[1].set(0);
-    flowRate[2].set(0);
-    flowRate[3].set(0);
-    flowRate[4].set(0);
+    for (int i = 0; i < 5; i++) {
+        flowRate[i].attach();
+        flowRate[i].set(CLOSE_VALVE);
+        flowRate[i].detach();
+    }
 
     isIgnitionSequenceRunning = false;
 }
 
 void ignitionSequenceTask(void *pvParameters)
 {
-    // 1. Open the valve
-    // waoit 5 seconds
-    // 2. open vale
-    // wait 5 seconds
-    // ...
+    // set up the first 3 valves 
+    flowRate[0].attach();
+    flowRate[1].attach();
+    flowRate[3].attach();
+    // t -5
+    flowRate[0].set(OPEN_VALVE);
+    vTaskDelayMS(4000);
 
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-    // ...
+    // t -2
+    // start ignition coil
 
-    // Clean up
+    // t -1
+    flowRate[1].set(OPEN_VALVE);
+    flowRate[3].set(OPEN_VALVE);
+
+    vTaskDelayMS(6000);
+    // t 4
+    // stop ignition coil
+
+    // t 5
+    // close valves
+    flowRate[0].set(CLOSE_VALVE);
+    flowRate[1].set(CLOSE_VALVE);
+    flowRate[3].set(CLOSE_VALVE);
+    // detach them
+    flowRate[0].detach();
+    flowRate[1].detach();
+    flowRate[3].detach();
+    // attach the other 2 valves
+    flowRate[2].attach();
+    flowRate[4].attach();
+    // open valves
+    flowRate[2].set(OPEN_VALVE);
+    flowRate[4].set(OPEN_VALVE);
+
+    vTaskDelayMS(5000);
+
+    // t 10
+    flowRate[2].set(CLOSE_VALVE);
+    flowRate[4].set(CLOSE_VALVE);
+    flowRate[2].detach();
+    flowRate[4].detach();
     cleanUpIgnitionSequence();
     vTaskDelete(NULL);
 }

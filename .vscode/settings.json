@@ -1,11 +1,13 @@
 {
     "files.associations": {
+        "*.z4": "javascriptreact",
         "*.tcc": "cpp",
         "fstream": "cpp",
         "sstream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "bitset": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

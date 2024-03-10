@@ -9,6 +9,7 @@ class FlowRate {
   public:
     FlowRate();
     void setup(int pin);
+    void detach();
     void set(int value);
     void set(int value, int speed);
     int read();

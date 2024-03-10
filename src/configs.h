@@ -39,6 +39,10 @@
 #define FLOWRATE_PIN_3 8
 #define FLOWRATE_PIN_4 3
 
+// FLowrate 
+#define OPEN_VALVE 90
+#define CLOSE_VALVE 0
+
 // Load cell0
 #define LOADCELL_DT_0 4
 #define LOADCELL_SCK_0 5

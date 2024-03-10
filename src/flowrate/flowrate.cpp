@@ -25,6 +25,9 @@ void FlowRate::set(int value, int speed) {
     }
 }
 
+void FlowRate::detach() {
+    servo.detach();
+}
 
 int FlowRate::read() {
     // min pulse 527 us

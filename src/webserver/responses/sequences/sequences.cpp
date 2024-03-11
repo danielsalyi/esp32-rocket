@@ -36,7 +36,7 @@ void readSensorTask(void *pvParameters)
     vTaskDelete(NULL);
 }
 
-void cleanUpIgnitionSequence()
+void closeAllValves()
 {
     DEBUG("Cleaning up ignition sequence...");
 
@@ -46,9 +46,7 @@ void cleanUpIgnitionSequence()
 
     // close the valves
     for (int i = 0; i < 5; i++) {
-        flowRate[i].attach();
         flowRate[i].set(CLOSE_VALVE);
-        flowRate[i].detach();
     }
 
     isIgnitionSequenceRunning = false;
@@ -57,9 +55,6 @@ void cleanUpIgnitionSequence()
 void ignitionSequenceTask(void *pvParameters)
 {
     // set up the first 3 valves 
-    flowRate[0].attach();
-    flowRate[1].attach();
-    flowRate[3].attach();
     // t -5
     flowRate[0].set(OPEN_VALVE);
     vTaskDelayMS(4000);
@@ -80,13 +75,7 @@ void ignitionSequenceTask(void *pvParameters)
     flowRate[0].set(CLOSE_VALVE);
     flowRate[1].set(CLOSE_VALVE);
     flowRate[3].set(CLOSE_VALVE);
-    // detach them
-    flowRate[0].detach();
-    flowRate[1].detach();
-    flowRate[3].detach();
-    // attach the other 2 valves
-    flowRate[2].attach();
-    flowRate[4].attach();
+
     // open valves
     flowRate[2].set(OPEN_VALVE);
     flowRate[4].set(OPEN_VALVE);
@@ -96,9 +85,7 @@ void ignitionSequenceTask(void *pvParameters)
     // t 10
     flowRate[2].set(CLOSE_VALVE);
     flowRate[4].set(CLOSE_VALVE);
-    flowRate[2].detach();
-    flowRate[4].detach();
-    cleanUpIgnitionSequence();
+    closeAllValves();
     vTaskDelete(NULL);
 }
 
@@ -113,6 +100,7 @@ void createSequenceEndpoints(AsyncWebServer *server)
 
     server->on("/arm", HTTP_GET, [](AsyncWebServerRequest *request)
                {
+                    closeAllValves();
                    DEBUG("ARMED!");
                    led.set(255, 0, 0); // red
                    isArmed = true;
@@ -183,7 +171,7 @@ void createSequenceEndpoints(AsyncWebServer *server)
                    DEBUG("Aborting ignition sequence...");
 
                    vTaskSuspend(ignitionSequenceHandle);
-                   cleanUpIgnitionSequence();
+                   closeAllValves();
 
                    request->send(200, "Cleaned up!");
                    //

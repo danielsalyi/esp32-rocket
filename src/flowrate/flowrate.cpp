@@ -18,7 +18,10 @@ void FlowRate::attach() {
 }
 
 void FlowRate::set(int value) {
+    servo.attach(pin);
     servo.write(value);
+    vTaskDelay(500);
+    servo.detach();
 }
 
 void FlowRate::set(int value, int speed) {

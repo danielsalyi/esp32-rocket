@@ -6,8 +6,12 @@
         "sstream": "cpp",
         "streambuf": "cpp",
         "regex": "cpp",
+<<<<<<< HEAD
         "string": "cpp",
         "bitset": "cpp"
+=======
+        "string": "cpp"
+>>>>>>> main
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

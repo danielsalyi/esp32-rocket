@@ -50,7 +50,7 @@ void setup()
     DEBUG("====== Webserver setup ======");
     webserver.setup();
 
-    DEBUG("======Setup DONE======");
+    DEBUG("====== Setup DONE ======");
     // Hooks are in the webserver.cpp file
     // sequences are also gonna be somewhere there
     // vtastkschedular is already used so dont call

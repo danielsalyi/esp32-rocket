@@ -13,12 +13,11 @@ TaskHandle_t ignitionSequenceHandle = NULL;
 TaskHandle_t readSensorHandle = NULL;
 
 // wait t ms
-void vTaskDelayMS(int t) 
+void vTaskDelayMS(int t)
 {
     TickType_t xDelay = t / portTICK_PERIOD_MS;
     vTaskDelay(xDelay);
 }
-
 
 void readSensorTask(void *pvParameters)
 {
@@ -36,31 +35,28 @@ void readSensorTask(void *pvParameters)
     vTaskDelete(NULL);
 }
 
-void closeAllValves()
+void finishIgintion()
 {
     DEBUG("Cleaning up ignition sequence...");
 
     digitalWrite(IGNITER_PIN, LOW); // turn off the igniter
 
     DEBUG("Cleaning up flow rate...");
-
-    // close the valves
-    for (int i = 0; i < 5; i++) {
-        flowRate[i].set(CLOSE_VALVE);
-    }
+    flowRate[0].closeAll();
 
     isIgnitionSequenceRunning = false;
 }
 
 void ignitionSequenceTask(void *pvParameters)
 {
-    // set up the first 3 valves 
     // t -5
     flowRate[0].set(OPEN_VALVE);
-    vTaskDelayMS(4000);
+    vTaskDelayMS(3000);
 
     // t -2
     // start ignition coil
+    digitalWrite(IGNITER_PIN, HIGH); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
+    vTaskDelayMS(1000);
 
     // t -1
     flowRate[1].set(OPEN_VALVE);
@@ -69,6 +65,7 @@ void ignitionSequenceTask(void *pvParameters)
     vTaskDelayMS(6000);
     // t 4
     // stop ignition coil
+    digitalWrite(IGNITER_PIN, LOW); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
 
     // t 5
     // close valves
@@ -85,7 +82,11 @@ void ignitionSequenceTask(void *pvParameters)
     // t 10
     flowRate[2].set(CLOSE_VALVE);
     flowRate[4].set(CLOSE_VALVE);
-    closeAllValves();
+
+    DEBUG("IGNITION OVER");
+
+    finishIgintion();
+
     vTaskDelete(NULL);
 }
 
@@ -100,7 +101,6 @@ void createSequenceEndpoints(AsyncWebServer *server)
 
     server->on("/arm", HTTP_GET, [](AsyncWebServerRequest *request)
                {
-                    closeAllValves();
                    DEBUG("ARMED!");
                    led.set(255, 0, 0); // red
                    isArmed = true;
@@ -171,9 +171,19 @@ void createSequenceEndpoints(AsyncWebServer *server)
                    DEBUG("Aborting ignition sequence...");
 
                    vTaskSuspend(ignitionSequenceHandle);
-                   closeAllValves();
+                   finishIgintion();
 
                    request->send(200, "Cleaned up!");
+                   //
+               });
+
+    server->on("/test", HTTP_GET, [](AsyncWebServerRequest *request)
+               {
+                   DEBUG("Test endpoint hit!");
+
+                   request->send(200, "Testing...");
+
+                   flowRate[0].test();
                    //
                });
 }

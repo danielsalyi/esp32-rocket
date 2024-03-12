@@ -12,6 +12,13 @@ static std::atomic<bool> isIgnitionSequenceRunning(false);
 TaskHandle_t ignitionSequenceHandle = NULL;
 TaskHandle_t readSensorHandle = NULL;
 
+// wait t ms
+void vTaskDelayMS(int t)
+{
+    TickType_t xDelay = t / portTICK_PERIOD_MS;
+    vTaskDelay(xDelay);
+}
+
 void readSensorTask(void *pvParameters)
 {
     while (isIgnitionSequenceRunning)
@@ -21,44 +28,65 @@ void readSensorTask(void *pvParameters)
         flashWriter.append("0,1,2,3,4,5,6,7,8,9,10; \n");
         flashWriter.flush();
 
-        vTaskDelay(100 / portTICK_PERIOD_MS); // 100 delay in ms
+        vTaskDelayMS(100); // 100 delay in ms
     }
 
     // u need this for the task to delete itself if it jumps stacks?
     vTaskDelete(NULL);
 }
 
-void cleanUpIgnitionSequence()
+void finishIgintion()
 {
     DEBUG("Cleaning up ignition sequence...");
 
     digitalWrite(IGNITER_PIN, LOW); // turn off the igniter
 
     DEBUG("Cleaning up flow rate...");
-
-    // close the valves
-    flowRate[0].set(0);
-    flowRate[1].set(0);
-    flowRate[2].set(0);
-    flowRate[3].set(0);
-    flowRate[4].set(0);
+    flowRate[0].closeAll();
 
     isIgnitionSequenceRunning = false;
 }
 
 void ignitionSequenceTask(void *pvParameters)
 {
-    // 1. Open the valve
-    // waoit 5 seconds
-    // 2. open vale
-    // wait 5 seconds
-    // ...
+    // t -5
+    flowRate[0].set(OPEN_VALVE);
+    vTaskDelayMS(3000);
 
-    vTaskDelay(5000 / portTICK_PERIOD_MS);
-    // ...
+    // t -2
+    // start ignition coil
+    digitalWrite(IGNITER_PIN, HIGH); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
+    vTaskDelayMS(1000);
 
-    // Clean up
-    cleanUpIgnitionSequence();
+    // t -1
+    flowRate[1].set(OPEN_VALVE);
+    flowRate[3].set(OPEN_VALVE);
+
+    vTaskDelayMS(6000);
+    // t 4
+    // stop ignition coil
+    digitalWrite(IGNITER_PIN, LOW); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
+
+    // t 5
+    // close valves
+    flowRate[0].set(CLOSE_VALVE);
+    flowRate[1].set(CLOSE_VALVE);
+    flowRate[3].set(CLOSE_VALVE);
+
+    // open valves
+    flowRate[2].set(OPEN_VALVE);
+    flowRate[4].set(OPEN_VALVE);
+
+    vTaskDelayMS(5000);
+
+    // t 10
+    flowRate[2].set(CLOSE_VALVE);
+    flowRate[4].set(CLOSE_VALVE);
+
+    DEBUG("IGNITION OVER");
+
+    finishIgintion();
+
     vTaskDelete(NULL);
 }
 
@@ -143,9 +171,19 @@ void createSequenceEndpoints(AsyncWebServer *server)
                    DEBUG("Aborting ignition sequence...");
 
                    vTaskSuspend(ignitionSequenceHandle);
-                   cleanUpIgnitionSequence();
+                   finishIgintion();
 
                    request->send(200, "Cleaned up!");
+                   //
+               });
+
+    server->on("/test", HTTP_GET, [](AsyncWebServerRequest *request)
+               {
+                   DEBUG("Test endpoint hit!");
+
+                   request->send(200, "Testing...");
+
+                   flowRate[0].test();
                    //
                });
 }

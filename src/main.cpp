@@ -18,10 +18,10 @@ void setup()
     pinMode(RELAY_PIN_2, OUTPUT);
     pinMode(RELAY_PIN_3, OUTPUT);
 
-    digitalWrite(IGNITER_PIN, HIGH);
-    digitalWrite(RELAY_PIN_1, HIGH);
-    digitalWrite(RELAY_PIN_2, LOW);
-    digitalWrite(RELAY_PIN_3, LOW);
+    digitalWrite(IGNITER_PIN, RELAY_OFF);
+    digitalWrite(RELAY_PIN_1, RELAY_OFF);
+    digitalWrite(RELAY_PIN_2, RELAY_OFF);
+    digitalWrite(RELAY_PIN_3, RELAY_OFF);
 
     DEBUG("====== LED ======");
     led.setup();

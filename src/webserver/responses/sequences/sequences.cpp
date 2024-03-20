@@ -39,7 +39,7 @@ void finishIgintion()
 {
     DEBUG("Cleaning up ignition sequence...");
 
-    digitalWrite(IGNITER_PIN, LOW); // turn off the igniter
+    digitalWrite(IGNITER_PIN, RELAY_OFF); // turn off the igniter
 
     DEBUG("Cleaning up flow rate...");
     flowRate[0].closeAll();
@@ -55,7 +55,7 @@ void ignitionSequenceTask(void *pvParameters)
 
     // t -2
     // start ignition coil
-    digitalWrite(IGNITER_PIN, HIGH); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
+    digitalWrite(IGNITER_PIN, RELAY_ON);
     vTaskDelayMS(1000);
 
     // t -1
@@ -65,7 +65,7 @@ void ignitionSequenceTask(void *pvParameters)
     vTaskDelayMS(6000);
     // t 4
     // stop ignition coil
-    digitalWrite(IGNITER_PIN, LOW); // ! DOUBLE CHECK THIS IF THIS MEANS OFF
+    digitalWrite(IGNITER_PIN, RELAY_OFF);
 
     // t 5
     // close valves

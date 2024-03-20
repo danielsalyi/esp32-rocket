@@ -48,7 +48,7 @@ void setup()
     loadCell[1].setup(LOADCELL_DT_1, LOADCELL_SCK_1);
 
     DEBUG("====== Webserver setup ======");
-    webserver.setup();
+    //webserver.setup();
 
     DEBUG("====== Setup DONE ======");
     // Hooks are in the webserver.cpp file
@@ -61,5 +61,9 @@ void setup()
 void loop()
 {
     // Loop is not used as everything is task or event based
+    while (true) {
+        DEBUG(loadCell[0].read());
+        DEBUG(loadCell[1].read());
+    }
     vTaskDelete(NULL);
 }

@@ -3,7 +3,7 @@
 
 void createSequenceEndpoints(AsyncWebServer *server);
 
-#define OPEN_VALVE 90
-#define CLOSE_VALVE 0
+#define OPEN_VALVE 0
+#define CLOSE_VALVE 90
 
 #endif

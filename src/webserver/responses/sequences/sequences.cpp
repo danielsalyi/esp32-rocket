@@ -186,4 +186,9 @@ void createSequenceEndpoints(AsyncWebServer *server)
                    flowRate[0].test();
                    //
                });
+    server->on("/close", HTTP_GET, [](AsyncWebServerRequest *request)
+               {
+                   flowRate[0].closeAll();
+                   request->send(200, "closed");
+               });
 }

@@ -21,6 +21,8 @@
 #define DEBUG_F(...)
 #endif
 
+#define FUEL_PRIORITY 0
+
 #define RELAY_OFF 1
 #define RELAY_ON 0
 

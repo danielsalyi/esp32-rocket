@@ -41,8 +41,6 @@ void setup()
     flowRate[3].setup(FLOWRATE_PIN_3);
     flowRate[4].setup(FLOWRATE_PIN_4);
 
-    flowRate[0].closeAll();
-
     DEBUG("====== Load cell setup ======");
     loadCell[0].setup(LOADCELL_DT_0, LOADCELL_SCK_0);
     loadCell[1].setup(LOADCELL_DT_1, LOADCELL_SCK_1);

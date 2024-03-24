@@ -15,10 +15,6 @@ public:
   void attach();
   void detach();
   void set(int value);
-  void set(int value, int speed);
-  int read();
-  void test();
-  void closeAll();
 };
 
 extern FlowRate flowRate[5];

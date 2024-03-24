@@ -33,28 +33,26 @@ String FlashWriter::pathToFile()
 
 void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
 {
-    if (!sensorReadings) return;
+    if (!sensorReadings)
+        return;
 
     // Append pressure sensor readings
     String dataString = "";
-    for (int i = 0; i < numPressureSensors; ++i) {
-        dataString += String(sensorReadings->pressureSensorReadings[i]);
-        if (i < numPressureSensors - 1) {
-            dataString += ", "; 
-        }
-    }
+    dataString += String(sensorReadings->pressureSensor1);
+    dataString += ", ";
+    dataString += String(sensorReadings->pressureSensor2);
+    dataString += ", ";
 
     // Append load cell reading
     dataString += String(sensorReadings->loadCellReading) + ";\n";
 
-    counter += sizeof(dataString.c_str());
-    if (counter >= PAGE_SIZE) {
-        flush();
-        counter = sizeof(dataString.c_str());
-    };
-
     appendToFile(dataString.c_str());
-    // if counter reached, flush?
+
+    counter++;
+    if (counter % 3 == 0)
+    {
+        flush();
+    };
 }
 
 // =================== private===================

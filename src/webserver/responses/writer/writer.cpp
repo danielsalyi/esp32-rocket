@@ -2,6 +2,9 @@
 #include "flashWriter/flashWriter.h"
 #include <ESPAsyncWebServer.h>
 
+#include <pressureSensor/pressureSensor.h>
+#include <loadcell/loadcell.h>
+
 #define SPIFFS LittleFS
 
 void createFlashWriterEndpoints(AsyncWebServer *server)
@@ -30,11 +33,14 @@ void createFlashWriterEndpoints(AsyncWebServer *server)
 
     server->on("/writeSensor", HTTP_GET, [](AsyncWebServerRequest *request)
                {
-                   //   sendResponse(request, []() {
-                   // sensorReadings readings;
-                   // readSensors(readings);
-                   // flashWriter.appendSensorData(&readings);
-                   //   });
-                   //
-               });
+                   struct sensorReadings sensorReadings;
+
+                   sensorReadings.pressureSensor1 = PressureSensors[0].read();
+                   sensorReadings.pressureSensor2 = PressureSensors[1].read();
+                   sensorReadings.loadCellReading = loadCell[1].read();
+
+                   flashWriter.appendSensorData(&sensorReadings);
+                   flashWriter.flush();
+
+                   request->send(SPIFFS, flashWriter.pathToFile(), "text/plain"); });
 }

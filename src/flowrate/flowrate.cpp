@@ -24,7 +24,7 @@ void FlowRate::set(int value)
 {
     servo.attach(pin);
     servo.write(value);
-    // vTaskDelay(500); // MAYBE THIS IS NEEDED TEST it
+    vTaskDelay(1000); // MAYBE THIS IS NEEDED TEST it
     servo.detach();
 }
 

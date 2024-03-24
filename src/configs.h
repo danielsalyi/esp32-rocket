@@ -24,6 +24,8 @@
 #define RELAY_OFF 1
 #define RELAY_ON 0
 
+#define CALIBRATION_FACTOR 398
+
 // ===============================================
 // ============== PIN CONFIGURATIONS =============
 // ===============================================

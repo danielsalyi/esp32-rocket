@@ -1,11 +1,13 @@
 #include <ESPAsyncWebServer.h>
 #include <webserver/responses/sequences/sequences.h>
+#include <configs.h>
+#include <atomic>
+
+#include <pressureSensor/pressureSensor.h>
 #include "flashWriter/flashWriter.h"
 #include <led/led.h>
 #include <flowrate/flowrate.h>
-#include <configs.h>
-
-#include <atomic>
+#include <loadcell/loadcell.h>
 
 static std::atomic<bool> isArmed(false);
 static std::atomic<bool> isIgnitionSequenceRunning(false);
@@ -21,11 +23,15 @@ void vTaskDelayMS(int t)
 
 void readSensorTask(void *pvParameters)
 {
+    struct sensorReadings sensorReadings;
+
     while (isIgnitionSequenceRunning)
     {
-        // read data...
+        sensorReadings.pressureSensor1 = PressureSensors[0].read();
+        sensorReadings.pressureSensor2 = PressureSensors[1].read();
+        sensorReadings.loadCellReading = loadCell[1].read();
 
-        flashWriter.append("0,1,2,3,4,5,6,7,8,9,10; \n");
+        flashWriter.appendSensorData(&sensorReadings);
         flashWriter.flush();
 
         vTaskDelayMS(100); // 100 delay in ms
@@ -174,16 +180,6 @@ void createSequenceEndpoints(AsyncWebServer *server)
                    finishIgintion();
 
                    request->send(200, "Cleaned up!");
-                   //
-               });
-
-    server->on("/test", HTTP_GET, [](AsyncWebServerRequest *request)
-               {
-                   DEBUG("Test endpoint hit!");
-
-                   request->send(200, "Testing...");
-
-                   flowRate[0].test();
                    //
                });
 }

@@ -18,10 +18,10 @@ void setup()
     pinMode(RELAY_PIN_2, OUTPUT);
     pinMode(RELAY_PIN_3, OUTPUT);
 
-    digitalWrite(IGNITER_PIN, HIGH);
-    digitalWrite(RELAY_PIN_1, HIGH);
-    digitalWrite(RELAY_PIN_2, LOW);
-    digitalWrite(RELAY_PIN_3, LOW);
+    digitalWrite(IGNITER_PIN, RELAY_OFF);
+    digitalWrite(RELAY_PIN_1, RELAY_OFF);
+    digitalWrite(RELAY_PIN_2, RELAY_OFF);
+    digitalWrite(RELAY_PIN_3, RELAY_OFF);
 
     DEBUG("====== LED ======");
     led.setup();
@@ -41,8 +41,6 @@ void setup()
     flowRate[3].setup(FLOWRATE_PIN_3);
     flowRate[4].setup(FLOWRATE_PIN_4);
 
-    flowRate[0].closeAll();
-
     DEBUG("====== Load cell setup ======");
     loadCell[0].setup(LOADCELL_DT_0, LOADCELL_SCK_0);
     loadCell[1].setup(LOADCELL_DT_1, LOADCELL_SCK_1);
@@ -61,5 +59,9 @@ void setup()
 void loop()
 {
     // Loop is not used as everything is task or event based
+
+    // DEBUG_F("Load cell 0: %d\n", loadCell[0].read());
+    // DEBUG_F("Load cell 1: %d\n", loadCell[1].read());
+
     vTaskDelete(NULL);
 }

@@ -19,15 +19,14 @@ void LoadCell::setup(int LOADCELL_DT, int LOADCELL_SCK)
     scale.begin(LOADCELL_DT, LOADCELL_SCK);
 
     // it will be "ready" even if its not connected so idk
-    if(scale.is_ready())
+    if (scale.is_ready())
     {
-        scale.set_scale();
         DEBUG("Scale is ready");
+        scale.set_scale(CALIBRATION_FACTOR); // calibrating
+        scale.tare();                        // tare
     }
     else
     {
         DEBUG("Scale is not ready");
     }
-
-    scale.tare(10); // calibration
 }

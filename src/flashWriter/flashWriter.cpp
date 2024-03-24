@@ -39,9 +39,9 @@ void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
     // Append pressure sensor readings
     String dataString = "";
     dataString += String(sensorReadings->pressureSensor1);
-    dataString += ", ";
+    dataString += ",";
     dataString += String(sensorReadings->pressureSensor2);
-    dataString += ", ";
+    dataString += ",";
 
     // Append load cell reading
     dataString += String(sensorReadings->loadCellReading) + ";\n";
@@ -49,7 +49,7 @@ void FlashWriter::appendSensorData(struct sensorReadings *sensorReadings)
     appendToFile(dataString.c_str());
 
     counter++;
-    if (counter % 3 == 0)
+    if (counter % 8 == 0)
     {
         flush();
     };

@@ -1,3 +1,16 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
 Here is the fuel sequence: 
 Fuel priority sequence:
 
@@ -10,6 +23,34 @@ Fuel priority sequence:
 7. Servo 1 and 3 close (7 seconds).
 8. Servo 2 and 4 open (8 seconds (change to as early as possible after 1 and 3 close)
 9. Servo 2 and 4 close (15 seconds).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Oxygen priority sequence:

@@ -61,7 +61,7 @@ void loop()
     // Loop is not used as everything is task or event based
 
     // DEBUG_F("Load cell 0: %d\n", loadCell[0].read());
-
     // DEBUG_F("Load cell 1: %d\n", loadCell[1].read());
-    // vTaskDelete(NULL);
+
+    vTaskDelete(NULL);
 }
